@@ -18,28 +18,28 @@
             $.ajax({
                 type: 'GET',
                 dataType: 'JSON',
-                url: 'https://morganoffice.herokuapp.com/api/departments/',
+                url: 'https://bigeye7.herokuapp.com/api/cases/',
                 success: function (data) {
                     console.log(data);
                     i = 0;
                     while (i < data.length){
-                        department = data[i];
-                        $("#show_departments").append("" +
+                        cases = data[i];
+                        $("#show_cases").append("" +
                             "<option value='"
-                            +department.department_id+"'>" +
-                            department.name +
+                            +cases.CaseID+"'>" +
+                            cases.Description +
                             "</option>");
 
                         i++;
                     }
-                    $("#show_departments").change(function () {
-                        department_id = $("#show_departments").val();
-                        getSingleDepartment(department_id);
+                    $("#show_cases").change(function () {
+                        CaseID = $("#show_cases").val();
+                        getSingleCase(CaseID);
                     });
 
-                    $("#change_department_but").click(function () {
-                        department_id = $("#show_departments").val();
-                        updateDepartment(department_id);
+                    $("#change_case_but").click(function () {
+                        CaseID = $("#show_cases").val();
+                        updateCase(CaseID);
                     });
                 },
                 error: function (err) {
@@ -50,16 +50,21 @@
 
         });
 
-        function getSingleDepartment(department_id){
+        function getSingleCase(CaseID){
             $.ajax({
                 type: 'GET',
                 dataType: 'JSON',
-                url: 'https://morganoffice.herokuapp.com/api/departments/'+department_id+'/',
+                url: 'https://morganoffice.herokuapp.com/api/departments/'+CaseID+'/',
                 success: function (data) {
                     console.log(data);
                     department = data;
-                    $("#department_name_input").val(department.name);
-                    $("#department_location_input").val(department.location);
+                    $("#case_Description_input").val(cases.Description);
+                    $("#case_CaseType_input").val(cases.CaseType);
+                    $("#case_CaseDate_input").val(cases.CaseDate);
+                    $("#case_Status_input").val(cases.Status);
+                    $("#case_Fee_input").val(cases.Fee);
+                    $("#case_Notes_input").val(cases.Notes);
+                    $("#case_Client_input").val(cases.Client);
                 },
                 error: function (err) {
                     console.log(err);
@@ -67,17 +72,27 @@
             });
         }
 
-        function updateDepartment(department_id) {
-            department_name= $("#department_name_input").val();
-            department_location= $("#department_location_input").val()
+        function updateCase(CaseID) {
+            cases_Description= $("#cases_Description_input").val();
+            cases_CaseType= $("#cases_CaseType_input").val();
+            cases_CaseDate= $("#cases_CaseDate_input").val();
+            cases_Status= $("#cases_Status_input").val();
+            cases_Fee= $("#cases_Fee_input").val();
+            cases_Notes= $("#cases_Notes_input").val();
+            cases_Client= $("#cases_Client_input").val();
             $.ajax({
                 type: 'PUT',
                 dataType: 'JSON',
-                url: 'https://morganoffice.herokuapp.com/api/departments/'+department_id+'/',
+                url: 'https://morganoffice.herokuapp.com/api/departments/'+CaseID+'/',
                 data: {
-                    "department_id": department_id,
-                    "name": department_name,
-                    "location": department_location
+                    "CaseID": cases_CaseID,
+                    "Description": cases_Description,
+                    "CaseType": cases_CaseType,
+                    "CaseDate": cases_CaseType,
+                    "Status": cases_Status,
+                    "Fee": cases_Fee,
+                    "Notes": cases_Notes,
+                    "Client": cases_Client,
                 },
                 success: function (data) {
                     console.log(data);
@@ -92,21 +107,38 @@
 </head>
 <body>
 <form onsubmit="return false">
-    <p> <!-- I will show all departments here -->
-        <label>Department</label>
-        <select id="show_departments">
-            <option>Please choose a department</option>
+    <p>
+        <label>ClientID</label>
+        <input id="cases_ClientID_input" type="text">
+    </p>
+    <p>
+        <label>Description</label>
+        <select id="cases_Description_input">
+            <option>Please Select A Case</option>
         </select>
     </p>
+
     <p>
-        <label>Name: </label>
-        <input id="department_name_input" type="text">
+        <label>Case Type</label>
+        <input id="cases_CaseType_input" type="text">
     </p>
     <p>
-        <label>Location: </label>
-        <input id="department_location_input" type="text">
+        <label>Case Date: </label>
+        <input id="cases_name_input" type="text">
     </p>
-    <p><button id="change_department_but">Change</button></p>
+    <p>
+        <label>Fee: </label>
+        <input id="cases_Fee_input" type="text">
+    </p>
+    <p>
+        <label>Notes: </label>
+        <input id="cases_Notes_input" type="text">
+    </p>
+    <p>
+        <label>Status: </label>
+        <input id="cases_Status_input" type="text">
+    </p>
+    <p><button id="change_department_but">Change</button><button><a href="MainMenu.html">Return</a></button></p>
 </form>
 </body>
 </html>
