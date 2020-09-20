@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Add Investigator</title>
+    <title>Add Client</title>
     <style type="text/css">
         button {
             width: 20%;
@@ -17,16 +17,16 @@
     <script>
         $(document).ready(function () {
             $.ajax({
-                type: 'GET',
+                type: 'Get',
                 dataType: 'JSON',
-                url: 'https://bigeye7.herokuapp.com/api/investigators/',
+                url: 'https://bigeye7.herokuapp.com/api/clients/',
                 success: function (data) {
                     // location.reload();
 
                     i = 0;
                     while (i < data.length) {
-                        investigator = data[i];
-                        $("#InvestigatorID_input").append("<option value='" + investigator.InvestigatorID + "'>" + investigator.FirstName + "</option>");
+                        clients = data[i];
+                        $("#ClientID_input").append("<option value='" + clients.ClientID + "'>" + clients.FirstName + "</option>");
                         i = i + 1;
                     }
                 },
@@ -35,30 +35,32 @@
                 }
             });
 
-            $("#add_investigator_but").click(function () {
+            $("#add_clients_but").click(function () {
                 lastname1 = $("#LastName_input").val();
                 firstname1 = $("#FirstName_input").val();
                 street1 = $("#StreetAddress_input").val();
                 suburb1 = $("#Suburb_input").val();
                 phone1 = $("#PhoneNumbrer_input").val();
-                hourly_rate1 = $("#HourlyRate_input").val();
-                investigator1 = $("#InvestigatorID_input").val();
+                email1 = $("#EmailAddress_input").val();
+                status1 = $("#ClientStatus_input").val();
+                client1 = $("#ClientID_input").val();
 
                 $.ajax({
                     type: 'POST',
                     dataType: 'JSON',
-                    url: 'https://bigeye7.herokuapp.com/api/investigators/',
+                    url: 'https://bigeye7.herokuapp.com/api/clients/',
                     data: {
                         LastName: lastname1,
                         FirstName: firstname1,
                         StreetAddress: street1,
                         Suburb: suburb1,
                         PhoneNumbrer: phone1,
-                        HourlyRate: hourly_rate1,
-                        investigator: investigator1
+                        EmailAddress: email1,
+                        ClientStatus: status1,
+                        ClientID: client1,
                     },
                     success: function (data) {
-                        alert('Investigator added successfully');
+                        alert('Client added successfully');
                         location.reload();
                     },
                     error: function (err) {
@@ -70,8 +72,9 @@
                         $("#StreetAddress_input_err").text(errors.StreetAddress);
                         $("#Suburb_input_err").text(errors.Suburb);
                         $("#PhoneNumbrer_input_err").text(errors.PhoneNumbrer);
-                        $("#HourlyRate_input_err").text(errors.HourlyRate);
-                        $("#InvestigatorID_input").text(errors.InvestigatorID);
+                        $("#EmailAddress_input_err").text(errors.EmailAddress);
+                        $("#ClientStatus_input").text(errors.ClientStatus);
+                        $("#ClientID_input").text(errors.ClientID);
                     }
                 });
             });
@@ -79,9 +82,8 @@
     </script>
 </head>
 <body>
-<h1>Add Investigator</h1>
 <form onsubmit="return false">
-    <p><label> Investigator ID: </label>
+    <p><label> ClientID: </label>
         <select id="">
             <option value="">Auto Generated</option>
         </select>
@@ -96,11 +98,11 @@
     <p id="Suburb_input_err"></p>
     <p><label> Phone Number: </label><input id="PhoneNumbrer_input" type="text" maxlength="15" size="15"></p>
     <p id="PhoneNumbrer_input_err"></p>
-    <p><label> Hourly Rate: </label><input id="HourlyRate_input" type="number" maxlength="5" size="5"></p>
-    <p id="HourlyRate_input_err"></p>
-
-    <p id="InvestigatorID_input_err"></p>
-    <button type="button" id="add_investigator_but">Add Investigator</button><button><a href="MainMenu.html">Return</a></button>
+    <p><label> Email Address: </label><input id="EmailAddress_input" type="text" maxlength="25" size="35"></p>
+    <p id="EmailAddress_input_err"></p>
+    <p><label> Client Status: </label><input id="ClientStatus_input" type="text" maxlength="7" size="25"></p>
+    <p id="ClientStatus_input_err"></p>
+    <button type="button" id="add_client_but">Add Client</button><button><a href="MainMenu.html">Main Menu</a></button>
 </form>
 </body>
 </html>
