@@ -25,8 +25,8 @@
 
                     i = 0;
                     while (i < data.length) {
-                        clients = data[i];
-                        $("#ClientID_input").append("<option value='" + clients.ClientID + "'>" + clients.FirstName + "</option>");
+                        client = data[i];
+                        $("#ClientID_input").append("<option value='" + client.ClientID + "'>" + client.FirstName + "</option>");
                         i = i + 1;
                     }
                 },
@@ -35,7 +35,7 @@
                 }
             });
 
-            $("#add_clients_but").click(function () {
+            $("#add_client_but").click(function () {
                 lastname1 = $("#LastName_input").val();
                 firstname1 = $("#FirstName_input").val();
                 street1 = $("#StreetAddress_input").val();
