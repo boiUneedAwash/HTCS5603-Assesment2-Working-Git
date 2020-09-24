@@ -15,26 +15,28 @@
             crossorigin="anonymous">
     </script>
     <script>
-        $(document).ready(function () {
+        function clientList() {
             $.ajax({
-                type: 'Get',
-                dataType: 'JSON',
-                url: 'https://bigeye7.herokuapp.com/api/cases/',
-                success: function (data) {
-                    // location.reload();
-
+                type: 'GET',
+                url: 'https://bigeye7.herokuapp.com/api/clients/',
+                success: function (clients) {
+                    console.log(clients);
                     i = 0;
-                    while (i < data.length){
-                        cases = data[i];
-                        $("#CaseID_input").append("<option value='"+cases.CaseID+"'>"+cases.Description+"</option>");
-                        i = i + 1;
+                    while (i < clients.length){
+                        ClientID = clients[i].ClientID;
+                        clientname = clients[i].FirstName;
+                        $("#Client_input").append("<option value='"+ClientID+"'>"+clientname+"</option>");
+                        i = i+1;
                     }
                 },
-                error: function (err) {
-                    console.log(err);
+                error: function () {
+                    alert("error");
                 }
             });
+        }
 
+        $(document).ready(function () {
+            clientList()
             $("#add_cases_but").click(function () {
                 description1 = $("#Description_input").val();
                 casetype1 = $("#CaseType_input").val();
@@ -43,7 +45,6 @@
                 fee1 = $("#Fee_input").val();
                 notes1 = $("#Notes_input").val();
                 client1 = $("#Client_input").val();
-                case1 = $("#CaseID_input").val();
 
                 $.ajax({
                     type: 'POST',
@@ -57,7 +58,6 @@
                         Fee: fee1,
                         Notes: notes1,
                         Client: client1,
-                        CaseID: case1,
                     },
                     success: function (data) {
                         alert('Case added successfully');
@@ -73,92 +73,46 @@
                         $("#Status_input_err").text(errors.Status);
                         $("#Fee_input_err").text(errors.Fee);
                         $("#Notes_input_err").text(errors.Notes);
-                        $("#Client_input").text(errors.Client);
-                        $("#CaseID_input").text(errors.CaseID);
+                        $("#Client_input_err").text(errors.Client);
                     }
                 });
-
-                $.ajax({
-                    type: 'GET',
-                    dataType: 'JSON',
-                    url: 'https://bigeye7.herokuapp.com/api/cases/',
-                    success: function (data) {
-                        console.log(data);
-                        i = 0;
-                        while (i < data.length){
-                            cases = data[i];
-                            $("#show_CaseType").append("" +
-                                "<option value='"
-                                +cases.CaseType+"'>" +
-                                "</option>");
-
-                            i++;
-                        }
-                        $("#show_cases").change(function () {
-                            CaseID = $("#show_cases").val();
-                            getSingleCase(CaseID);
-                        });
-
-                        $("#delete_but").click(function () {
-                            CaseID = $("#show_cases").val();
-                            deleteCase(CaseID);
-                        });
-
-                        $("#show_CaseType").change(function () {
-                            CaseType = $("#show_CaseType").val();
-                            getSingleCaseType(CaseType);
-                        });
-                    },
-                    error: function (err) {
-                        console.log(err);
-                    }
-                });
-
-                function getSingleCaseType(CaseType){
-                    $.ajax({
-                        type: 'GET',
-                        dataType: 'JSON',
-                        url: 'https://bigeye7.herokuapp.com/api/cases/'+CaseType+'/',
-                        success: function (data) {
-                            console.log(data);
-                            cases = data;
-                            $("#cases_CaseType_input").val(cases.CaseType);
-                        },
-                        error: function (err) {
-                            console.log(err);
-                        }
-                    });
-                }
             });
         });
     </script>
 </head>
 <body>
+<h1>Add Case</h1>
 <form onsubmit="return false">
-    <p><label> CaseID: </label>
-        <select id="Auto Generated">
-            <option value = "">Select one</option>
-        </select>
-    </p>
     <p><label> Description: </label><input id="Description_input" type="text" maxlength="25" size="25"></p>
     <p id = "Description_input_err"></p>
     <p><label> Case Type: </label>
-        <select id="cases_CaseType_input">
-            <option value = "">Select one</option>
+        <select id="CaseType_input">
+            <option value = "Employee Background Check">Employee Background Check</option>
+            <option value = "Credit Check">Credit Check</option>
+            <option value = "Surveillance">Surveillance</option>
+            <option value = "Accident Report">Accident Report</option>
+            <option value = "Insurance Check">Insurance Check</option>
         </select>
     </p>
     <p id = "CaseType_input_err"></p>
-    <p><label> Case Date: </label><input id="CaseDate_input" type="text" maxlength="50" size="50"></p>
+    <p><label> Case Date: </label><input id="CaseDate_input" type="date" maxlength="50" size="50"></p>
     <p id = "CaseDate_input_err"></p>
-    <p><label> Status: </label><input id="Status_input" type="text" maxlength="15" size="15"></p>
+    <p><label> Status: </label>
+        <select id="Status_input">
+            <option value="Open">Open</option>
+            <option value="Closed">Closed</option>
+        </select>
+    </p>
     <p id = "Status_input_err"></p>
     <p><label> Fee: </label><input id="Fee_input" type="text" maxlength="15" size="15"></p>
     <p id = "Fee_input_err"></p>
-    <p><label> Notes: </label><input id="Notes_input" type="number" maxlength="5" size="5"></p>
+    <p><label> Notes: </label><input id="Notes_input" type="text" maxlength="500" size="50"></p>
     <p id = "Notes_input_err"></p>
-    <p><label> Client: </label><input id="Client_input" type="text" maxlength="25" size="25"></p>
+    <p><label> Client: </label>
+        <select id="Client_input">
+        </select>
+    </p>
     <p id = "Client_input_err"></p>
-
     <button type="button" id="add_cases_but">Add Case</button><button><a href="MainMenu.html">Return</a></button>
 </form>
 </body>

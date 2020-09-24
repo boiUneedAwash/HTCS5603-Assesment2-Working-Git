@@ -3,18 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <title>Update Case</title>
-    <!--
-    1. I need to know all departments -- I need to select department id
-    2. I need to get information from this department id
-    3. I know which department information I will change, I make a put request
-    -->
     <script
             src="https://code.jquery.com/jquery-3.5.1.min.js"
             integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0="
             crossorigin="anonymous">
     </script>
     <script>
+        function clientList() {
+            $.ajax({
+                type: 'GET',
+                url: 'https://bigeye7.herokuapp.com/api/clients/',
+                success: function (clients) {
+                    console.log(clients);
+                    i = 0;
+                    while (i < clients.length){
+                        ClientID = clients[i].ClientID;
+                        clientname = clients[i].FirstName;
+                        $("#cases_Client_input").append("<option value='"+ClientID+"'>"+clientname+"</option>");
+                        i = i+1;
+                    }
+                },
+                error: function () {
+                    alert("error");
+                }
+            });
+        }
+
         $(document).ready(function () {
+            clientList()
             $.ajax({
                 type: 'GET',
                 dataType: 'JSON',
@@ -29,7 +45,6 @@
                             +cases.CaseID+"'>" +
                             cases.Description +
                             "</option>");
-
                         i++;
                     }
                     $("#show_cases").change(function () {
@@ -46,25 +61,23 @@
                     console.log(err);
                 }
             });
-
-
         });
 
         function getSingleCase(CaseID){
             $.ajax({
                 type: 'GET',
                 dataType: 'JSON',
-                url: 'https://morganoffice.herokuapp.com/api/departments/'+CaseID+'/',
+                url: 'https://bigeye7.herokuapp.com/api/cases/'+CaseID+'/',
                 success: function (data) {
                     console.log(data);
                     department = data;
-                    $("#case_Description_input").val(cases.Description);
-                    $("#case_CaseType_input").val(cases.CaseType);
-                    $("#case_CaseDate_input").val(cases.CaseDate);
-                    $("#case_Status_input").val(cases.Status);
-                    $("#case_Fee_input").val(cases.Fee);
-                    $("#case_Notes_input").val(cases.Notes);
-                    $("#case_Client_input").val(cases.Client);
+                    $("#cases_Description_input").val(cases.Description);
+                    $("#cases_CaseType_input").val(cases.CaseType);
+                    $("#cases_CaseDate_input").val(cases.CaseDate);
+                    $("#cases_Status_input").val(cases.Status);
+                    $("#cases_Fee_input").val(cases.Fee);
+                    $("#cases_Notes_input").val(cases.Notes);
+                    $("#cases_Client_input").val(cases.Client);
                 },
                 error: function (err) {
                     console.log(err);
@@ -80,15 +93,16 @@
             cases_Fee= $("#cases_Fee_input").val();
             cases_Notes= $("#cases_Notes_input").val();
             cases_Client= $("#cases_Client_input").val();
+
             $.ajax({
                 type: 'PUT',
                 dataType: 'JSON',
-                url: 'https://morganoffice.herokuapp.com/api/departments/'+CaseID+'/',
+                url: 'https://bigeye7.herokuapp.com/api/cases/'+CaseID+'/',
                 data: {
-                    "CaseID": cases_CaseID,
+                    "CaseID": CaseID,
                     "Description": cases_Description,
                     "CaseType": cases_CaseType,
-                    "CaseDate": cases_CaseType,
+                    "CaseDate": cases_CaseDate,
                     "Status": cases_Status,
                     "Fee": cases_Fee,
                     "Notes": cases_Notes,
@@ -108,14 +122,14 @@
 <body>
 <form onsubmit="return false">
     <p>
-        <label>ClientID</label>
-        <input id="cases_ClientID_input" type="text">
+        <label>Case</label>
+        <select id="show_cases">
+            <option>Please Select A Case</option>
+        </select>
     </p>
     <p>
         <label>Description</label>
-        <select id="cases_Description_input">
-            <option>Please Select A Case</option>
-        </select>
+        <input id="cases_Description_input" type="text">
     </p>
 
     <p>
@@ -123,8 +137,8 @@
         <input id="cases_CaseType_input" type="text">
     </p>
     <p>
-        <label>Case Date: </label>
-        <input id="cases_name_input" type="text">
+        <label> Case Date: </label>
+        <input id="cases_CaseDate_input" type="date">
     </p>
     <p>
         <label>Fee: </label>
@@ -138,7 +152,12 @@
         <label>Status: </label>
         <input id="cases_Status_input" type="text">
     </p>
-    <p><button id="change_department_but">Change</button><button><a href="MainMenu.html">Return</a></button></p>
+    <p>
+        <label>Client: </label>
+        <select id="cases_Client_input">
+        </select>
+    </p>
+    <p><button id="change_case_but">Change</button><button><a href="MainMenu.html">Return</a></button></p>
 </form>
 </body>
 </html>

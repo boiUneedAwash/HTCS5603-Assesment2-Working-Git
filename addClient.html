@@ -16,34 +16,15 @@
     </script>
     <script>
         $(document).ready(function () {
-            $.ajax({
-                type: 'Get',
-                dataType: 'JSON',
-                url: 'https://bigeye7.herokuapp.com/api/clients/',
-                success: function (data) {
-                    // location.reload();
-
-                    i = 0;
-                    while (i < data.length) {
-                        client = data[i];
-                        $("#ClientID_input").append("<option value='" + client.ClientID + "'>" + client.FirstName + "</option>");
-                        i = i + 1;
-                    }
-                },
-                error: function (err) {
-                    console.log(err);
-                }
-            });
-
             $("#add_client_but").click(function () {
                 lastname1 = $("#LastName_input").val();
                 firstname1 = $("#FirstName_input").val();
                 street1 = $("#StreetAddress_input").val();
                 suburb1 = $("#Suburb_input").val();
+                city1 = $("#City_input").val();
                 phone1 = $("#PhoneNumbrer_input").val();
                 email1 = $("#EmailAddress_input").val();
                 status1 = $("#ClientStatus_input").val();
-                client1 = $("#ClientID_input").val();
 
                 $.ajax({
                     type: 'POST',
@@ -57,7 +38,7 @@
                         PhoneNumbrer: phone1,
                         EmailAddress: email1,
                         ClientStatus: status1,
-                        ClientID: client1,
+                        City: city1,
                     },
                     success: function (data) {
                         alert('Client added successfully');
@@ -74,7 +55,7 @@
                         $("#PhoneNumbrer_input_err").text(errors.PhoneNumbrer);
                         $("#EmailAddress_input_err").text(errors.EmailAddress);
                         $("#ClientStatus_input").text(errors.ClientStatus);
-                        $("#ClientID_input").text(errors.ClientID);
+                        $("#City_input").text(errors.City);
                     }
                 });
             });
@@ -83,11 +64,6 @@
 </head>
 <body>
 <form onsubmit="return false">
-    <p><label> ClientID: </label>
-        <select id="">
-            <option value="">Auto Generated</option>
-        </select>
-    </p>
     <p><label> First Name: </label><input id="FirstName_input" type="text" maxlength="25" size="25"></p>
     <p id="FirstName_input_err"></p>
     <p><label> Last Name: </label><input id="LastName_input" type="text" maxlength="25" size="25"></p>
@@ -96,13 +72,20 @@
     <p id="StreetAddress_input_err"></p>
     <p><label> Suburb: </label><input id="Suburb_input" type="text" maxlength="15" size="15"></p>
     <p id="Suburb_input_err"></p>
+    <p><label> City: </label><input id="City_input" type="text" maxlength="15" size="15"></p>
+    <p id="City_input_err"></p>
     <p><label> Phone Number: </label><input id="PhoneNumbrer_input" type="text" maxlength="15" size="15"></p>
     <p id="PhoneNumbrer_input_err"></p>
     <p><label> Email Address: </label><input id="EmailAddress_input" type="text" maxlength="25" size="35"></p>
     <p id="EmailAddress_input_err"></p>
-    <p><label> Client Status: </label><input id="ClientStatus_input" type="text" maxlength="7" size="25"></p>
-    <p id="ClientStatus_input_err"></p>
+<!--    <p><label> Client Status: </label><input id="ClientStatus_input" type="text" maxlength="7" size="25"></p>-->
+<!--    <p id="ClientStatus_input_err"></p>-->
+    <p><label> Client Status: </label><select id="ClientStatus_input">
+        <option value="Valid">Valid</option>
+        <option value="Invalid">Invalid</option>
+    </select></p>
     <button type="button" id="add_client_but">Add Client</button><button><a href="MainMenu.html">Main Menu</a></button>
+
 </form>
 </body>
 </html>
